@@ -1,0 +1,36 @@
+<!--myEditor -->
+	<div id='div1' >
+		<div class='myEditor'>	
+			<div class='mb-2'>
+				<div class='btn-group'>
+					<button id='btn1' class='btn btn-info'>blod</button>
+				</div>
+				<div style='display: inline-block;vertical-align: middle;'>
+				<div class='myGroup'>
+					<button id='btn2' class='btn btn-info'>
+						<span class='showColor'></span>
+						A
+					</button>
+					<button id='selectColor' class='btn btn-info'><span class='dropdown-toggle'> </span></button>
+				</div>
+				</div>
+				<div class='btn-group'>
+					<button class='btn btn-info' id='btn3'> insert image</button>
+				</div>
+			</div>
+			<div class='mycontainer'>
+				<div class='leftFloor' (click)='switchEditor()' > {{switchBtn}}</div>
+				<div (focus)="model=='insert'?focus($event):0" (blur)="model=='insert'?blur():0" class='mycol scroll colOne' [hidden]='switchH' contenteditable="true" id='TEXTOne'></div>
+				<div #contentHTML class='mycol scroll colTwo' [hidden]='!switchH' contenteditable="true" id='HTMLOne'></div>
+				<div class='popDiv' style='display:none'>
+					<div class='close'></div>
+					<div style='display:none' id='insertImg'>
+						<label>ImgUrl:</label>
+						<input type='text' class='form-control mb-2'/>
+						<input class='btn btn-info' type='button' value='insert'/>
+						<button class='btn btn-info' >clear</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

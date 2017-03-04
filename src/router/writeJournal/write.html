@@ -1,0 +1,74 @@
+<div>
+	<div class='form-group '>
+		<label >title: </label>
+		<div class='form-group row'>
+			<div class='col-6'>
+			<input class='form-control' id='inputTitle' (blur)='titleExist=false' style='display: inline-block;'>
+			</div>
+			<div [@slideToggle]='titleExist?"true":"false"' class='col-6 badge badge-danger' style='overflow: hidden;font-size: 1rem;'>
+				The title has existed
+			</div>
+		</div>
+		<label >category</label>
+		<div class='input-group dropdown col-6' id='categoryDropdown' style='padding:0px' >
+			<input type='text' (click)='fn()' [(ngModel)]='selectCategorys' name='category' class='col-6 form-control' readonly data-toggle='dropdown'/>
+			<button class='input-group-addon dropdown-toggle' data-toggle='dropdown' (click)='fn()'></button>
+			<div class='dropdown-menu'>
+				<div class='dropdown-item' [class.bg-info]='selectCategorys=="default"' (click)='selectCategorys="default"' pointer>default</div>
+				<span *ngFor='let v of _cs.cgArr'>
+					<div pointer class='dropdown-item ' [class.bg-info]='selectCategorys==v.name'  *ngIf="v.name!='default'&&v.name!='all'"
+						(click)='selectCategoryFn(v.name,$event)'
+					>
+						<a  >{{v.name}} <span class="badge badge-default"> {{v.count}}</span></a>
+						<button [@fickerIn]='showEditCategory?"ficker":"others"' [style.display]='showEditCategory?"inline-block":"none"' class='btn btn-default badge badge-info float-right' (click)='deleteCategory(v)'>&times; </button>
+					</div>
+				</span>
+				<div class='dropdown-divider'></div>
+
+				<div style='text-align: center'><button class='btn btn-sm btn-secondary' (click)='editCategory($event)'>Edit Category</button></div>
+				<form *ngIf='showEditCategory'>
+				<div class='form-group' [class.has-warning]='existCategory' style='padding:0.5rem'>
+					<label>append </label>
+					<input class='form-control form-control-warning mb-2' placeholder='append name' style='width:100%' #spy='ngModel' name='addInput' [(ngModel)]='addInput' (keyup)='check(spy.value)' maxlength='10' required>
+					<button [disabled]='existCategory' *ngIf='spy.value' class='btn btn-secondary btn-sm ' (click)='appendCategory(spy.value)'>append</button>
+				</div>
+				</form>
+			</div>
+		
+		</div>
+	</div>
+	<ztw-editor [model]="model"></ztw-editor>
+	<div class='form-group  dropdown mb-4' >
+		<label> Tags:</label>
+		<div class='form-group row'>
+		<div class='col-6'>
+		<input (blur)='searchTagStr=false;fn2()' name='searchTag' id='tags' (ngModelChange)='changeTagsBar($event)' [(ngModel)]='tagsStr' (keyup)='searchTag($event)' class='form-control' />
+		</div>
+		<div [@slideToggle]='legalTags?"false":"true"' class='col-6 badge badge-danger' style='font-size:1rem'> The Tag size is lte 6 Bytes,<br>Count of Tags can't over than 6</div>
+		</div>
+		<div style='position:absolute;bottom:-1.2rem;left:0px'>
+			<div [style.display]='searchTagStr?"block":"none"' style='color:skyblue'>{{searchTagStr2}}</div>
+		</div>
+	</div>
+	<button [disabled]='submitDisabled' class='btn btn-info' (click)='submit()'>{{model=='modify'?'Modify':'Submit'}} </button>
+	<!-- model-->
+	
+	<div id='myModal' class='modal fade' >
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+				<div class='modal-header'>
+				Warning
+				</div>
+				<div class='modal-body'>
+				Are you confirm?
+				</div>
+				<div class='modal-footer'>
+					<button class='btn btn-info' data-dismiss='modal' (click)='setSubject(true)'> confirm</button>
+					<button class='btn btn-info' data-dismiss='modal' (click)='setSubject(false)'> cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>

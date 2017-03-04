@@ -1,0 +1,62 @@
+<div class="col-lg-9 col">
+    <div class="card">
+    <div class="card-header text-center">
+        <i class="fa fa-bookmark-o"></i> Message board
+    </div>
+    <div class="card-block">
+        <form [formGroup]="formGroup">
+        <div class="form-group" [class.text-danger]="FormErrors.name">
+            <label  ><i class="fa fa-user-circle-o fa-2x mr-3"></i>NAME:</label>
+            <input id="aaa" type="text" [formControlName]="'name'"  class="form-control">
+        </div>
+        <div class="alert alert-danger" [@slideRow]="FormErrors.name?'true':'false'">
+            {{FormErrors.name}}
+        </div>
+        <div class="form-group ">
+            <label  style="height:2.5rem;overflow: hidden;">
+                <span [class.text-danger]="FormErrors.content">
+                <i class="fa fa-comment-o fa-2x mr-3"></i>Message:
+                </span>
+                <span >
+                    <span *ngIf="replyName">
+                    <span class="btn-group" >
+                    <button class="btn btn-danger btn-sm" st>{{replyName}} </button>
+                    <a class="btn btn-outline-danger btn-sm" (click)="replyName=''">&times;</a>
+                    </span>
+                    <i class="fa fa-reply"> </i>
+                    </span>
+                </span>
+            </label>
+            <textarea  [formControlName]="'content'" class="form-control" style="height: 150px" ></textarea>
+        </div>
+        </form>
+        <div [@fadeIn]  class="alert alert-danger" [@slideRow]="FormErrors.content?'true':'false'">
+            {{FormErrors.content}}
+        </div>
+        <verify-canvas #verify></verify-canvas>
+        <button [disabled]="this.verify.content.toLowerCase()!==this.verify.verifyStr||!formGroup.valid||preventSubmit" class="btn btn-secondary btn-block btn-inverse" (click)="submit()">submit</button>
+        <div class="mt-3">
+            <div *ngIf="!notesExist" class="text-center">
+                No Message....<i class="fa fa-coffee fa-2x"></i>
+            </div>
+            <div [@fadeIn]  class="media mb-4" *ngFor="let msn of messageArr">
+                <span class="index btn btn-sm">{{msn.index}}# </span>
+                <div style="border-radius:0.4rem" (click)="replyName=msn.name" pointer class="col-2 d-flex align-self-center flex-column mr-2 text-center">
+                    <a><i class="fa fa-user-o mr-2" > </i></a>
+                    <p ><strong>{{msn.name}}</strong></p>
+                </div>
+                <div class="col-10 d-flex flex-column media-body">
+                    <div class="content" [innerHTML]="msn.content">
+
+                    </div>
+                    <p style="font-size:0.7rem;"class="text-muted text-right">
+                         Date:{{ msn.date | toDate}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <my-breakBar *ngIf="barArr" [barArr]="barArr" (selected)="gotoNote($event)"></my-breakBar>
+        <alert-modal #modal></alert-modal>
+    </div>
+    </div>
+</div>

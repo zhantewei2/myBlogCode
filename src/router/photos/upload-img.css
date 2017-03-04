@@ -1,0 +1,33 @@
+.upload-btn{
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:100%;
+    height:100%;
+    z-index:2;
+    opacity:0
+}
+.ImgBar{
+    background:gainsboro;
+    min-height: 15rem;
+}
+.bgGray{
+    background:rgba(0,0,0,0.3);
+    color:white;
+}
+.Ab-bottom{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    width:100%;
+}
+
+.dropdown-menu{
+    width:15rem;
+    left:-5;
+}
+
+.bgRed{
+    background:Red;
+    color:white;
+}

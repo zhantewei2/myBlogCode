@@ -1,0 +1,46 @@
+
+<div>
+</div>
+<div class="text-right"><i class="btn btn-secondary fa-edit fa" (click)="edit=!edit" *ngIf="_ls.logined"></i> </div>
+<div class="card-block d-flex flex-wrap">
+    <div [@fadeIn] class="album card" *ngFor="let album of _ss.rootData" pointer (click)="method.entryAlbum(album.name)">
+        <div *ngIf="album.main">
+            <img style="width:100%;height:100%" [src]="_ss.method.imgUrl(album.main)">
+        </div>
+        <div *ngIf="!album.main" class="d-flex justify-content-center" style="width: 100%;height:100%">
+            <i class="fa-file-image-o fa fa-4x align-self-center"> </i>
+        </div>
+        <div class="card-img-overlay d-flex justify-content-between flex-column">
+            <h4 class="card-title">
+                <span class="badge badge-default" style="color:white;background:rgba(0,0,0,0.5)">{{album.name}}</span>
+                <span class="close btn btn-secondary" [hidden]="!edit" (click)="$event.stopPropagation();method.delAlbum(album)">&times;</span>
+            </h4>
+            <div class="align-self-end"><span class="badge badge-default">{{album.count}}</span></div>
+        </div>
+    </div>
+    <div *ngIf="_ls.logined" pointer="gainsboro" (click)="method.showAppend()" class="album card append justify-content-center">
+        <i class="align-self-center fa fa-plus fa-4x"> </i>
+    </div>
+
+    <pop-view  #appendAlbum>
+        <div *ngIf="admin.formGroup">
+            <form [formGroup]="admin.formGroup" class="form-group " >
+                <label class='text-success'>Append Album &nbsp;<span class="text-danger">{{admin.appendNameError}}</span></label>
+                <div class="input-group" [class.has-danger]="!admin.appendNameControl.valid&&admin.appendNameControl.dirty">
+                    <input (focus)="admin.appendNameError=undefined" [class.form-control-danger]="!admin.appendNameControl.valid&&admin.appendNameControl.dirty" [formControlName]="'name'" class="form-control" #appendValue/>
+                </div>
+                <button [disabled]="!admin.formGroup.valid" class="btn btn-outline-success mt-3" (click)="method.appendAlbum(appendValue)">confirm </button>
+            </form>
+        </div>
+    </pop-view>
+    <pop-view #popView>
+        <div (click)="$event.stopPropagation()" class="text-center">
+            <p> <i class="fa-warning fa"> </i>Delete  photo albums named {{admin.DAname}}?</p>
+            <p>Will delete {{admin.DAcount}} photo!</p>
+            <div class="btn-group">
+                <button class="btn btn-danger" (click)="method.delAlbum2()">confirm</button>
+                <button class="btn btn-secondary" (click)="popView.hidden()">cancel</button>
+            </div>
+        </div>
+    </pop-view>
+</div>

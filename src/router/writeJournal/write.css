@@ -1,0 +1,115 @@
+  .badge:hover{
+    background:gray;
+    cursor:pointer;
+    background:white;
+    color:black;
+  }
+  .myGroup{
+    display:flex;
+    word-spacing: -0.5em;
+  }
+  .myGroup .btn{
+    display: inline;
+    left:0px;
+  }
+  .leftFloor{
+    position:absolute;
+    writing-mode:vertical-rl;
+    z-index: 3;
+    left:0px;
+    color:white;
+    text-align: center;
+    top:50px;
+    border-radius: 0.5rem;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    height:5rem;
+    user-select:none;
+    width:1.3rem;
+    border:1px solid skyblue;
+    background: skyblue;
+  }
+  .leftFloor:hover{
+    cursor:pointer;
+  }
+  .myGroup button:first-child{
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+  .myGroup button:last-child{
+    padding-left:5px;
+    padding-right:5px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+  }
+  .mycol{
+    box-sizing:border-box;
+    background: white;
+    border-radius:5px;
+    left:0px;
+    border:1px solid gainsboro;
+    height:100%;
+    width:100%;
+    padding-left:1.5rem;
+    position:absolute;
+  }
+  .colOne{z-index:2;display: block}
+  .colTwo{z-index:1;display: block}
+  .scroll{
+    overflow-x:auto;
+  }
+  .mycontainer{
+    height:500px;
+    width:100%;
+    position:relative;
+    overflow: hidden;
+  }
+
+
+  .showColor{
+    width:1em;
+    height:1em;
+    display: inline-block;
+    border-radius:0.3em;
+    background: black;
+  }
+  .tab{
+    display: inline-block;
+    width:2em;
+  }
+  .popDiv{
+    box-sizing: border-box;
+    position:absolute;
+    width:80%;
+    height:150px;
+    border:1px solid gainsboro;
+    border-radius:2em;
+    top:20%;
+    word-wrap:break-word;
+    padding:1em;
+    left:10%;
+    background:rgba(255,255,255,0.5);
+    z-index: 20;
+  }
+
+
+  .close{
+    position:absolute;
+    width:1.5em;
+    height:1.5em;
+    right:0px;
+    top:0px;color:gray;
+    text-align:center;
+    font-size:1.2em;
+    text-shadow:2px 2px 1px black;
+  }
+  .close:hover{
+    cursor: pointer;
+    transform:scale(1.2);
+  }
+  .close:active{
+    transform: scale(1);
+  }
+  .myEditor{
+    width:100%;
+  }

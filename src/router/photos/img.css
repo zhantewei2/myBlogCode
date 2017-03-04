@@ -1,0 +1,25 @@
+.album{
+    width:15rem;
+    height:15rem;
+    margin:1rem;
+}
+.album.append{
+    background:gainsboro;
+}
+.photosMain{
+
+}
+.Ab-bottom{
+    position:absolute;
+    bottom:0px;
+    width:100%;
+    left:0px;
+    text-align: center;
+    color:white;
+}
+.Ab-top-right{
+    position:absolute;
+    top:0.5rem;
+    right:0.5rem;
+
+}

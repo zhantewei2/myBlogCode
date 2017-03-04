@@ -1,0 +1,45 @@
+<div>
+    <h5>
+        <span class="btn-group">
+            <button (click)="goBack()" class="btn btn-default"><i class="fa-arrow-left fa"></i></button>
+            <button class="btn btn-secondary"><i class="fa fa-folder-open-o"> </i> {{msn.parent}}</button>
+        </span>
+    </h5>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <span><i class="fa-bookmark fa fa-2x"></i></span>
+            <div >
+                <span (click)="popView.show()" pointer *ngIf="msn.edit" class="btn btn-secondary"> upload</span>
+                <span (click)="method.edit()" pointer class="btn btn-success" *ngIf="_ls.logined"><i class="fa-edit fa"></i>&nbsp;Edit</span>
+            </div>
+        </div>
+
+        <div class="card-block " >
+            <div *ngIf="msn.relItem">
+                <div  [hidden]="data||msn.relItem.count==0" class="spinner-loader"></div>
+                <div [hidden]="msn.relItem.count!=0">
+                    <i class="fa-leaf fa fa-2x"> </i>empty
+                </div>
+            </div>
+            <div *ngIf="data">
+                <my-breakBar [barArr]="data.barArr" (selected)="method.gotoPage($event)"> </my-breakBar>
+
+                <div *ngIf="data.photosArr" class="d-flex flex-wrap">
+                    <div class="album card" *ngFor="let img of data.photosArr" pointer (click)="method.selectedPhoto(img)">
+                        <img class="card-img" [src]="_ss.method.imgUrl(img._id)" style="height: 100%;">
+                        <div class="card-img-overlay">
+                            <span (click)="method.del($event,img._id)" ><h3 pointer class="badge badge-danger Ab-top-right" [hidden]="!msn.edit"> DEL &times;</h3></span>
+                            <div style="height:2rem;background:rgba(0,0,0,0.5)" [@ficker]="this.msn.changedItemName==img.name?'ficker':'default'" class="Ab-bottom" >{{img.name}} </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <pop-view #popView>
+        <upload-img [album]="msn.parent" (uploaded)="method.whenUploaded($event)"></upload-img>
+    </pop-view>
+    <pop-view #popView2 (hidden)="method.photoHidden()">
+        <photo-one [album]="msn.parent" #showImg [img]="msn.showImg" (changed)="method.whenChanged($event)"></photo-one>
+    </pop-view>
+</div>
