@@ -1,0 +1,37 @@
+import { Parent, SimpleHttp } from '../service/simpleHttp.service';
+import { ActivatedRoute } from '@angular/router';
+import { PageBreakService } from '../service/page-break.service';
+import { DataPersistance } from '../service/data-persistance.service';
+export declare class PageBreakComponent {
+    parent: Parent;
+    private simpleHttp;
+    private route;
+    private pageService;
+    private db;
+    symbolMerge: string;
+    cancelLC: any;
+    btns: any[];
+    limitPage: number;
+    rangePage: number;
+    totalPage: number;
+    nextPage: number;
+    prePage: number;
+    options: any;
+    shareOpt: any;
+    sendUrl: string;
+    addition: any;
+    v0: any;
+    v1: any;
+    name: string;
+    getClassify: any;
+    constructor(parent: Parent, simpleHttp: SimpleHttp, route: ActivatedRoute, pageService: PageBreakService, db: DataPersistance);
+    start(): void;
+    init(opt: any): void;
+    pre(): void;
+    next(): void;
+    provideBtns(rangeNum: any): void;
+    gotoPage(page: any): void;
+    updateParent(url: any, opt0: any): Promise<{}>;
+    convertStart(page: any): number;
+    updateData(data: any, count?: any, fn?: any): void;
+}
