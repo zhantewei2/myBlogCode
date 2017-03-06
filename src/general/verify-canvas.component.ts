@@ -36,7 +36,7 @@ export class VerifyCanvasComponent{
     ){
         this.subject.debounceTime(1000).subscribe(v=>{
             this.simpleHttp.post('/router/journals.json/one/notes/verify').then(v => {
-                let value = this.decrypt(v, 'ztwk'),
+                let value = this.decrypt(v, 'love'),
                     canvas: any = document.getElementById('canvas'),
                     ctx = canvas.getContext('2d'),
                     dots = 5,
@@ -68,7 +68,6 @@ export class VerifyCanvasComponent{
         this.subject.next(true);
     }
     draw(str,ctx,grd){
-        console.log(str);
         ctx.shadowBlur=10;
         ctx.shadowColor='gray';
         for(let i=0,len=str.length;i<len;i++){

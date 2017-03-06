@@ -177,7 +177,7 @@ export class WriteJournalComponent{
 	submit(){
 		let title=$('#inputTitle').val();
 		if(!title){return};
-		title=title.trim();
+		title=title.trim().replace(/(\s|\r|\n)/g,'');
 		let content=this._wec.getHTML();
 		if(!content){return;};
 		if(this.titleExistArr.indexOf(title)>=0){

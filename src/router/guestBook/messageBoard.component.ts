@@ -126,7 +126,7 @@ export class MessageBoardComponent{
             d:obj,
             v:this.verify.content
         };
-        if(this.replyName) {
+        if(!!this.replyName) {
             obj.content = `<i class="fa fa-user mr-2"></i><b class="text-primary">${this.replyName}</b>:<i class="fa fa-reply"></i>;<br>`+obj.content;
         }
         this.simpleHttp.post('/router/journals.json/one/notes/append',obj2).then(v=>{

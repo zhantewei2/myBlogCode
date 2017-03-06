@@ -5,23 +5,24 @@ declare var $:any;
 @Component({
 	selector:'my-app',
 	template:`
-		<nav class='navbar navbar-light bg-faded navbar-toggleable-md ' style="position:fixed;top:0px;left:0px;z-index:10;width:100%;">
-			<button button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#topNavCollapse">
+		<nav class='navbar navbar-inverse navbar-toggleable-md bg-inverse' style="position:fixed;top:0px;left:0px;z-index:10;width:100%;">
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#topNavCollapse">
 				<span class='navbar-toggler-icon'></span>
 			</button>
 			<div class='navbar-brand ' >
 				<span>ZTW</span>
 			</div>
 			<div class='collapse navbar-collapse' id='topNavCollapse'>
-				<nav class='navbar-nav'>
+				<nav class='navbar-nav mr-auto'>
 					<a class='nav-item nav-link' [class.bottomBar]='ensureActive(home.className)'  #home [routerLink]='"homePage"' routerLinkActive='active'>首页</a>
 					<a class='nav-item nav-link' [class.bottomBar]='ensureActive(journal.className)' #journal [routerLink]='"journal"' routerLinkActive='active'>日志</a>
 					<a class="nav-item nav-link" [class.bottomBar]="ensureActive(photos.className)" #photos [routerLink]="'photos'" routerLinkActive="active">相册</a>
 				</nav>
-			</div>
-			<div class='text-muted hidden-md-down dropdown' style='color:gainsboro;'> 
-				<div *ngIf='!loginService.logined'>
-					<button  class='btn btn-sm btn-default'  data-toggle='dropdown'>Login</button>
+			
+				<div class='navbar-text dropdown' [class.ww]="!container" style='color:gainsboro;'>
+				 &nbsp;
+				<div *ngIf='!loginService.logined' >
+					<button  class='btn btn-sm btn-outline-secondary'  data-toggle='dropdown'>Login</button>
 					<div class='dropdown-menu' style='left:-100px;padding:10px'>
 						<form #loginForm='ngForm'>
 						<div class='form-group has-success'>
@@ -35,7 +36,7 @@ declare var $:any;
 					</div>
 				</div>
 				<div *ngIf='loginService.logined'>
-					<button class='btn btn-default dropdown-toggle btn-sm' data-toggle='dropdown'>Admin </button>
+					<button class='btn btn-outline-secondary dropdown-toggle btn-sm' data-toggle='dropdown'>Admin </button>
 					<div class='dropdown-menu' style='left:-160px;padding:15px;width:250px;'>
 						<div class=' media'>
 							<img class='rounded d-flex mr-2' style='width:64px;height:64px;' src='./img/admin.jpg'>
@@ -54,19 +55,22 @@ declare var $:any;
 						</div>
 					</div>
 				</div>
-
+			</div>
 			</div>
 		</nav>
 		<div style="width: 100%;height:50px"></div>
 		<br>
-		<div class='container'>
+		<div [class.container]='container'>
 		<router-outlet></router-outlet>
 		</div>
 		<journals-nav></journals-nav>
 	`,
 	styles: [
-		'.bottomBar{border-bottom:2px solid gray}',
-		'.left-box{height:200px;border:1px solid red;}'
+		'.bottomBar{background:gray;border-radius:5px}',
+		'.left-box{height:200px;border:1px solid red;}',
+		'.ww{width:100%;}',
+		'.navbar-text>div{position:absolute;top:0.5rem;right:10px;}'
+
 	],
 	animations:[]
 
@@ -80,8 +84,12 @@ export class AppComponent{
 	loginName;
 	loginPswd;
 	logined:boolean=this.loginService.logined;
+	container:boolean=true;
 	ngOnInit(){
-		console.log($('body').height())
+		this.setContainer();
+        $(window).resize(()=>{
+			this.setContainer()
+        })
 	}
 	login(){
 		this.loginService.login({a:this.loginName,p:this.loginPswd})
@@ -93,6 +101,14 @@ export class AppComponent{
 	}
 	ensureActive(v){
 		return /active/.test(v);
+	};
+	setContainer(){
+		let width=$('body').innerWidth();
+		if(width<980){
+			this.container=false;
+		}else{
+			this.container=true;
+		}
 	}
 };
 

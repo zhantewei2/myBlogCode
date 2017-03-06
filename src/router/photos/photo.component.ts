@@ -4,6 +4,7 @@ import {FadeIn} from '../../animations/some-animate.fn';
 import {LoginService} from '../../service/login.service';
 import {ShareService,Data} from './share.service';
 import {Ficker} from '../../animations/some-animate.fn';
+import {DataPersistance} from '../../service/data-persistance.service';
 @Component({
     templateUrl:'photo.html',
     styleUrls:['./img.css'],
@@ -17,7 +18,8 @@ export class PhotoComponent{
         private route:ActivatedRoute,
         private router:Router,
         public _ls:LoginService,
-        public _ss:ShareService
+        public _ss:ShareService,
+        public _dp:DataPersistance
     ){}
     ngOnInit(){
         let params:any=this.route.snapshot.params;
@@ -36,7 +38,7 @@ export class PhotoComponent{
             }
         };
         this.msn.parent=params.n;
-        if(!this._ss.rootData){
+        if(!this._dp.photoData){
             (this._ss.method.getRootData() as any).then(d=>{
                 init();
             })

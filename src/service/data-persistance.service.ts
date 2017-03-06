@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class DataPersistance{
 	db:any={};
+	photoData:Array<any>;
 	initCollection(size=5){
 		size--;
 		let colle:any={};

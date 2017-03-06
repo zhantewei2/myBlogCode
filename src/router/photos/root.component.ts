@@ -5,6 +5,7 @@ import {LoginService} from '../../service/login.service';
 import {SimpleHttp} from '../../service/simpleHttp.service';
 import {ShareService} from './share.service';
 import {FadeIn} from '../../animations/some-animate.fn';
+import {DataPersistance} from '../../service/data-persistance.service';
 class Album{
     name:string;
     count:number;
@@ -26,7 +27,8 @@ export class RootComponent{
         private _fb:FormBuilder,
         private simpleHttp:SimpleHttp,
         public _ss:ShareService,
-        private router:Router
+        private router:Router,
+        public _dp:DataPersistance
     ){}
     ngOnInit(){
         this._ss.method.getRootData();
@@ -40,7 +42,7 @@ export class RootComponent{
     };
     method:any={
         appendAlbum:(input)=>{
-            if(!this._ss.rootData) return;
+            if(!this._dp.photoData) return;
             let value=this.admin.appendNameControl.value;
             if(!this.method.checkValue(value)){
                 this.admin.appendNameError='repeat name';
@@ -49,7 +51,7 @@ export class RootComponent{
             value=value.replace(/(\r|\n|\s)/g,'');
             this.simpleHttp.post('/router/photos/admin/appendAlbum',{n:value}).then(v=>{
                 let obj={name:value,count:0};
-               this._ss.rootData.push(obj);
+               this._dp.photoData.push(obj);
             });
             this.appendAlbum.hidden();
             input.value='';
@@ -66,7 +68,7 @@ export class RootComponent{
             this.admin.appendNameControl=this.admin.formGroup.get('name');
         },
         checkValue:(value)=>{
-           for(let i of this._ss.rootData){
+           for(let i of this._dp.photoData){
                if(i.name==value)return false;
            }
            return true;
@@ -85,7 +87,7 @@ export class RootComponent{
                 if(!v)return;
                 this.modal.hidden();
                 let relItem=this._ss.method.findItem(this.admin.DAname);
-                this._ss.rootData.splice(this._ss.rootData.indexOf(relItem),1);
+                this._dp.photoData.splice(this._dp.photoData.indexOf(relItem),1);
             })
         }
     }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SimpleHttp} from '../../service/simpleHttp.service';
 import {PageBreakService} from '../../service/page-break.service';
+import {DataPersistance} from '../../service/data-persistance.service';
 export class Data{
     photosArr:any;
     barArr:Array<number>;
@@ -11,7 +12,6 @@ export class PushPhoto{
 };
 @Injectable()
 export class ShareService{
-    rootData:Array<any>;
     pageData:any={};
     pageConfig:any={
         pageSize:6,
@@ -24,7 +24,8 @@ export class ShareService{
     };
     constructor(
         private simpleHttp:SimpleHttp,
-        private _ps:PageBreakService
+        private _ps:PageBreakService,
+        public _dp:DataPersistance
     ){}
 
     method={
@@ -32,10 +33,10 @@ export class ShareService{
             return '/public/photos/'+name;
         },
         getRootData:()=> {
-            if (this.rootData) return this.rootData;
+            if (this._dp.photoData) return this._dp.photoData;
             return this.simpleHttp.post('/router/photos/rootLoad').then((v: any) => {
-                this.rootData=JSON.parse(v).photoCategory;
-                return Promise.resolve(this.rootData);
+                this._dp.photoData=JSON.parse(v).photoCategory;
+                return Promise.resolve(this._dp.photoData);
             })
         },
         getPageData:(breakPageTool,album,nowPage)=>{
@@ -60,7 +61,7 @@ export class ShareService{
             })
         },
         findItem:(name)=>{
-            for(let item of this.rootData){
+            for(let item of this._dp.photoData){
                 if(name===item.name)return item;
             }
             return null;

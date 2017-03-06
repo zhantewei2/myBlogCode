@@ -3,7 +3,7 @@
 </div>
 <div class="text-right"><i class="btn btn-secondary fa-edit fa" (click)="edit=!edit" *ngIf="_ls.logined"></i> </div>
 <div class="card-block d-flex flex-wrap">
-    <div [@fadeIn] class="album card" *ngFor="let album of _ss.rootData" pointer (click)="method.entryAlbum(album.name)">
+    <div [@fadeIn] class="album card" *ngFor="let album of _dp.photoData" pointer (click)="method.entryAlbum(album.name)">
         <div *ngIf="album.main">
             <img style="width:100%;height:100%" [src]="_ss.method.imgUrl(album.main)">
         </div>
