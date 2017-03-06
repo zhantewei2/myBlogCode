@@ -45,7 +45,7 @@ module.exports=function(myMongoose){
 	router.post('/journals.json/one/notes/verify',async(ctx)=>{
 		let verifyStr=myVerify.genVerify();
 		ctx.session.verify=verifyStr.toLowerCase();
-		let bb=myVerify.encrypt(verifyStr,'love');
+		let bb=myVerify.encrypt(verifyStr,'keys');
 		ctx.body=bb;
 	})
 
