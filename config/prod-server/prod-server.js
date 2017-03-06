@@ -10,9 +10,6 @@ var koa=require('koa'),
 	bodyParser=require('koa-bodyParser'),
 	serve=require('koa-static');
 var app=new koa();
-var rooter=function(...args){
-	return path.join(__dirname,...args);
-};
 var myMongoose=require('./mongoose.js');
 
 app.keys=['myKey'];
