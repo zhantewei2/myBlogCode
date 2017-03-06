@@ -36,7 +36,7 @@ export class VerifyCanvasComponent{
     ){
         this.subject.debounceTime(1000).subscribe(v=>{
             this.simpleHttp.post('/router/journals.json/one/notes/verify').then(v => {
-                let value = this.decrypt(v, 'love'),
+                let value = this.decrypt(v, 'keys'),
                     canvas: any = document.getElementById('canvas'),
                     ctx = canvas.getContext('2d'),
                     dots = 5,
