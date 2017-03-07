@@ -22,7 +22,8 @@ export class SimpleHttp{
 	});
 
 	realPath(url){
-		return url
+		return 'http://localhost:3001'+path.join('/',url);
+		//return url;
 	}
 	parseObj(obj){
 		let str='?';

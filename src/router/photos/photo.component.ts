@@ -37,7 +37,7 @@ export class PhotoComponent{
                 });
             }
         };
-        this.msn.parent=params.n;
+        this.msn.parent=decodeURIComponent(params.n);
         if(!this._dp.photoData){
             (this._ss.method.getRootData() as any).then(d=>{
                 init();

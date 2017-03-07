@@ -10,7 +10,7 @@ declare var $:any;
         <left-mid-fix (hidden)="hidden()" [toggle]="showToggle">
             <div style="margin:0.5rem">Categorys:</div>
             <div style="font-size:0.9rem;" class="list-group">
-                <div [class.selected]="selectedName==cg.name" class="list-group-item" style="padding:0px" *ngFor="let cg of _cs.cgArr">
+                <div [class.selected]="selectedName==cg.name" class="list-group-item" style="padding:0px" *ngFor="let cg of _cs.showCgArr">
                 <a  style="background:transparent;width:100%;height:100%;display:flex;justify-content:space-between;padding:0.6rem;" (click)="getCategory(cg)"  pointer>
                     <span>
                     <i class="fa fa-home" *ngIf="cg.name=='all'"> </i>

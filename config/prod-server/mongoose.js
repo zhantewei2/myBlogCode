@@ -163,35 +163,35 @@ exports.dealJournal=function(obj,condit){
 	if(condit){
 		return new Promise((resolve)=>{
 			(new journalCo(obj2)).save(v=>{
-				dealCategory(()=>{
-					dealTag(()=>{
-						resolve('');
-					})
-				})
+				dealUser(()=>resolve(1));
 			})
 		});
 	}else{
 		return new Promise(resolve=>{ 
-			journalCo.update({title:obj.t},{$set:obj2,$currentDate:{lastModify:true},$inc:{version:1}}).then(v=>{
+			journalCo.update({title:obj.q},{$set:obj2,$currentDate:{lastModify:true},$inc:{version:1}}).then(v=>{
 				if(v){
-					dealCategory(()=>{
-						dealTag(()=>{
-							resolve('');
-						})
-					})
+					dealUser(()=>resolve(1));
 				}else{
 					resolve('false');
 				}
 			})
 		})
 	}
-	function dealCategory(fn){
-		let obj={};
-		obj['category.'+obj2.category]=1;
-		userCo.update({name:'admin'},{$inc:obj},(err,data)=>{
+	function dealUser(fn){
+		let upObj={};
+		if(obj.at)upObj['$set']={tags:obj.at};
+		console.log(obj.oc);
+		if(obj2.category){
+			let ctObj={}
+			ctObj['category.'+obj2.category]=1;
+			obj.oc?ctObj['category.'+obj.oc]=-1:0;	
+			upObj['$inc']=ctObj;
+		}
+		userCo.update({name:'admin'},upObj,(err,data)=>{
 			fn(data);
 		})
 	}
+	/*
 	function dealTag(fn){
 		if(obj2.tags&&obj2.tags[0]){
 			obj2.tags.AsyncForEach(
@@ -214,6 +214,7 @@ exports.dealJournal=function(obj,condit){
 			fn();
 		}
 	}
+	*/
 
 }
 

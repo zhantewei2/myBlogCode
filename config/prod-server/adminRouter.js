@@ -4,7 +4,7 @@ module.exports=function(mongoose){
 	var Router=require('koa-router');
 	var router=new Router();
 	router.use(async(ctx,next)=>{
-		if(ctx.session.login){
+		if(ctx.session.login/* &&ctx.get('X-XSRF-TOKEN')=='myKey' */){
 			await next();
 		}else{
 			ctx.response.status=500;
@@ -28,12 +28,12 @@ module.exports=function(mongoose){
 	router.post('/journals.json/del',async(ctx)=>{
 		let obj=ctx.request.body;
 		if(!obj)return;
-		console.log(obj);
 		ctx.body=await new Promise(resolve=>{
 			journalColle.remove({title:obj.t}).then(v=>{
 				if(!v) return resolve('');
-				if(!obj.d)return resolve(1);
-				userColle.update({},{$set:{tags:obj.d}}).then(v=>{
+				let cObj={};
+				cObj['category.'+obj.c]=-1;
+				userColle.update({},{$set:{tags:obj.d},$inc:cObj}).then(v=>{
 					!v?resolve(''):resolve(1);
 				})
 			})	

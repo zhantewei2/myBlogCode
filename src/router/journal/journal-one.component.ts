@@ -103,7 +103,7 @@ export class JournalOneComponent{
 		})());
 		let	params:any=this.route.snapshot.params;
 		this.obj.__proto__=this._cms.conveyData;
-		this.title=encodeURIComponent(params.n);
+		this.title=decodeURIComponent(params.n);
 		this.db.journalColle.then(model=>{
 			model.find(this.title).then(data=>{
 				if(params.f==='edit'){
@@ -179,6 +179,8 @@ export class JournalOneComponent{
 				this.db.journalColle.then(model=>{
 					model.remove(this.title).then(v=>{
 						this._dp.db={};
+						this._cs.showCgArr[0].count--;
+						this._cs.cgArr[this._cs.findI(this._cs.cgArr,this.journalData.category)].count--;
 						this.router.navigate(['../'],{relativeTo:this.route});
 					})
 				})
@@ -186,33 +188,21 @@ export class JournalOneComponent{
 		};
 		new Promise(r=> {
 			if (confirm('delete ' + this.title + '?')) {
-				if (!this._cs.tgArr) {
-					this._cs.getTags().then(v => {
-						if (!v)return;
-						r(true);
-					})
-				} else {
-					r(true);
-				}
+				this._cs.getTags().then(v=>r(v));
 			}else{
 				r(false)
 			}
 		}).then(v=>{
 			if(!v)return;
-			let sendObj:any={t:this.title},
+			let sendObj:any={t:this.title,c:this.journalData.category},
 				tags=this.journalData.tags,
 				option;
 			if(tags&&tags[0]){
-				this._cs.tgArr.forEach(item=>{
-					tags.forEach(tagName=>{
-						if(item.name==tagName){
-							if(item.count<=1){
-								this._cs.tgArr.splice(this._cs.tgArr.indexOf(item),1);
-							}else{
-								item.count--;
-							}
-						}
-					})
+				tags.forEach(tagName=>{
+					let i = this._cs.findI(this._cs.tgArr,tagName);
+					if(i!==null){
+						this._cs.tgArr[i].count<=1?this._cs.tgArr.splice(i,1):this._cs.tgArr[i].count--;
+					}
 				});
 				sendObj.d=this._cs.tgArr;
 			};

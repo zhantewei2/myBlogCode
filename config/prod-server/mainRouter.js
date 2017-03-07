@@ -31,6 +31,7 @@ module.exports=function(myMongoose){
 		let obj=ctx.request.body;
 		if(!obj)return;
 		if(obj.v!=ctx.session.verify)return;
+
 		ctx.body=await myMongoose.journalColle.appendNotes(obj.q,obj.d);
 	});
 	router.post('/journals.json/one/part',async(ctx)=>{

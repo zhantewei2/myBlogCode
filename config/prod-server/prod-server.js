@@ -7,7 +7,7 @@ var koa=require('koa'),
 	frontEndComponent=require('./angularProxy.js'),
 	path=require('path'),
 	session=require('koa-session'),
-	bodyParser=require('koa-bodyParser'),
+	bodyParser=require('koa-bodyparser'),
 	serve=require('koa-static');
 var app=new koa();
 var myMongoose=require('./mongoose.js');
@@ -22,13 +22,13 @@ app.use(mount('/public',convert(serve(path.join(__dirname,'public'),{
 }))))
 
 app.use(async(ctx,next)=>{
-	/* for dev
+	
 	ctx.response.set('Access-Control-Allow-Origin','http://localhost:3000');
 	ctx.response.set('Access-Control-Allow-Methods','POST,DELETE,PUT');
 	ctx.response.set('Access-Control-Allow-Headers','Content-Type');
 	ctx.response.set('Access-Control-Allow-Credentials','true');
-	ctx.cookies.set('XSRF-TOKEN','myKey',{httpOnly:false});
-	*/
+	
+	//ctx.cookies.set('XSRF-TOKEN','myKey',{httpOnly:false});
 	await next();
 })
 var	router=require('./mainRouter.js')(myMongoose),
@@ -43,4 +43,5 @@ app.use(rootRouter.allowedMethods());
 app.use(mount('/router',router.routes()));
 app.use(frontEndComponent(app,'dest.gzip',path.join(__dirname,'../../')));
 app.listen(3001);
+
 }

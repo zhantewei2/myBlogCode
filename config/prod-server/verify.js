@@ -39,6 +39,7 @@ module.exports=function verify(){
 			str2+=String.fromCharCode(48+Math.abs(temp));
 		};
 		str2+=String.fromCharCode(parseInt(tag,2)+65);
+		console.log(str2);
 		return str2;
 	}
 }

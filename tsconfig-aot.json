@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "node",
+    "declaration": true,
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "typeRoots": [ "./node_modules/@types" ],
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "types":[
+      "node"
+    ]
+  },
+  "angularCompilerOptions": {
+    "genDir": "aot",
+    "skipMetadataEmit":true
+  },
+  "awesomeTypescriptLoaderOptions":{
+    "forkChecker":true,
+    "useWebpackText":true
+  },
+  "files":[
+    "src/app.module.ts",
+    "src/router/guestBook/guestBook.module.ts",
+    "src/router/photos/photos.module.ts",
+    "src/router/writeJournal/writeJournal.module.ts"
+  ],
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules",
+    "dest",
+    "src/app/polyfill.ts"
+  ]
+}

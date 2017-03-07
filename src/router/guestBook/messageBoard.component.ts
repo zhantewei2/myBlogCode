@@ -69,7 +69,7 @@ export class MessageBoardComponent{
     ngOnInit(){
         let data:any=this.route.snapshot.params,
             id=this.count=+data.id;
-        this.title=data.n;
+        this.title=decodeURIComponent(data.n);
         if(id===0){
             this.notesExist=false;
         }else{

@@ -18,7 +18,6 @@ module.exports=function(mongoose){
 		})
 	})
 	router.post('/logout',async(ctx)=>{
-		console.log('out')
 		ctx.session=null;
 		ctx.body='1';
 	})

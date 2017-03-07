@@ -7,6 +7,7 @@ import {FickerIn,SlideToggle} from '../../animations/some-animate.fn';
 import {WriteEditorComponent} from './write-editor.component';
 import {CategorysService} from '../../service/categorys.service';
 import {ConveyJournalService} from '../../service/convey-message.service';
+
 import {Router} from '@angular/router';
 declare var $:any;
 @Component({
@@ -36,6 +37,7 @@ export class WriteJournalComponent{
 	titleExist:boolean=false;
 	legalTags:boolean=true;
 	model:string='insert';
+	data:any;
 	constructor(
 		private simpleHttp:SimpleHttp,
 		public _cs:CategorysService,
@@ -43,12 +45,16 @@ export class WriteJournalComponent{
 		private router:Router
 		){}
 	ngOnInit(){
-		let data=this._cjs.conveyJournalData;
-		if(/modify/.test(location.pathname)&&data){
+		if(/modify/.test(location.pathname)&&this._cjs.conveyJournalData){
+			this.data={};
+			for(var i in this._cjs.conveyJournalData){
+				this.data[i]=this._cjs.conveyJournalData[i];
+			}
 			this.model='modify';
-			this.selectCategorys=data.category||'default';
-			$('#inputTitle').val(data.title);
-			this.tagsStr=data.tags?data.tags.join(','):'';
+			this.selectCategorys=this.data.category||'default';
+			$('#inputTitle').val(this.data.title);
+			this.tagsStr=this.data.tags?this.data.tags.join(','):'';
+
 		}
 
 	}
@@ -120,7 +126,7 @@ export class WriteJournalComponent{
 		this.subject=new Subject();
 		this.subject.subscribe(v=>{
 			if(!v)return;
-			this.simpleHttp.del('router/admin/categorys.json',value).then((v:any)=>{
+			this.simpleHttp.del('router/admin/categorys.json',value.name).then((v:any)=>{
 				let index=this._cs.cgArr.indexOf(value);
 				this._cs.cgArr.splice(index,1);
 			})
@@ -140,6 +146,7 @@ export class WriteJournalComponent{
 			if(!v)return;
 			this.simpleHttp.update('router/admin/categorys.json',value).then(v=>{
 				this._cs.cgArr.push({name:value,count:0});
+				this._cs.reSetShowCg();
 				this.addInput='';
 			})
 		});
@@ -184,7 +191,7 @@ export class WriteJournalComponent{
 			this.titleExist=true;
 			return;
 		}
-		let tags=$('#tags').val().split(',');
+		let tags=$('#tags').val().split(',')||[];
 		if(!this.checkTags(tags)){
 			this.legalTags=false;
 			return;
@@ -195,36 +202,56 @@ export class WriteJournalComponent{
 			this.subject=new Subject();
 			this.subject.subscribe(boole=>{
 				if(!boole){this.submitDisabled=false;return;};
-				if(this.model=='insert') {
-					this.simpleHttp.post('router/admin/journals.json/titleExist', {q: title}).then(v => {
-						if (+v) {
-							this.titleExistArr.push(title);
-							this.submitDisabled = false;
-							this.titleExist = true;
-						} else {
-							this.simpleHttp.post('router/admin/journals.json/insert', {
-								t: title,
-								c: this.selectCategorys,
-								co: content,
-								ta: tags,
-								ab: this._wec.getAbstract(50)
-							}).then(v => {
+				let sendObj:any={
+					t: title,
+					co: content,
+					ta: tags,
+					ab: this._wec.getAbstract(50)
+				};
+
+				new Promise(resolve=>{
+					if(this.data&&title==this.data.title){
+						resolve(0);
+					}else{
+						this.simpleHttp.post('router/admin/journals.json/titleExist', {q: title}).then(v=>{
+							resolve(v);
+						})
+					}
+				}).then(v => {
+					if(+v){
+						this.titleExistArr.push(title);
+						this.submitDisabled = false;
+						this.titleExist = true;
+						return;
+					}
+					this.dealAllTags(tags).then(sendAllTags=>{
+
+						if(sendAllTags)sendObj.at=sendAllTags;
+						if(this.model=='insert') {
+							sendObj.c=this.selectCategorys;
+							this.simpleHttp.post('router/admin/journals.json/insert', sendObj).then(v => {
+								this._cs.cgArr[this._cs.findI(this._cs.cgArr,sendObj.c)].count++;
+								this._cs.reSetShowCg();
 								this._wec.clearDB();
 							})
+						}else{
+							sendObj.q=this.data.title;
+							if(this.selectCategorys!=this.data.category){
+								sendObj.c=this.selectCategorys;
+								sendObj.oc=this.data.category;
+							};
+							this.simpleHttp.post('router/admin/journals.json/update',sendObj).then(v=>{
+								if(sendObj.oc){
+									this._cs.cgArr[this._cs.findI(this._cs.cgArr,sendObj.oc)].count--;
+									this._cs.cgArr[this._cs.findI(this._cs.cgArr,sendObj.c)].count++;
+									this._cs.reSetShowCg();
+								}
+								this.router.navigate(['./journal/one',{n:title,f:'edit'}]);
+							})
 						}
-					})
-				}else{
-					this.simpleHttp.post('router/admin/journals.json/update',{
-						t:title,
-						c:this.selectCategorys,
-						co:content,
-						ta:tags,
-						ab:this._wec.getAbstract(50)
-					}).then(v=>{
-						console.log(v);
-						this.router.navigate(['./journal/one',{n:title,f:'edit'}]);
-					})
-				}
+					});
+
+				})
 			});
 			this.alertModal('确定写入？');
 
@@ -248,5 +275,60 @@ export class WriteJournalComponent{
 	alertModal(value){
 		$('#myModal .modal-body').html(value);
 		$('#myModal').modal('show');	
+	};
+	dealSelfTags(tags,callback){
+			let arr = [];
+			if(!this.data) {
+				if(!tags||!tags[0])return callback(arr);
+				tags.forEach(v => {
+					arr.push({name: v, insert: true})
+				});
+				return callback(arr)
+			}
+			if((!this.data.tags||!this.data.tags[0])&&(!tags||!tags[0]))return callback(arr);
+			tags.forEach(tag=>{
+				let self;
+				if(this.data.tags&&this.data.tags[0]){
+					this.data.tags.forEach(oTag => {
+						self = tag !== oTag ? true : false;
+					});
+				}else{
+					self=true;
+				}
+				if(self)arr.push({name:tag,insert:true});
+			});
+			this.data.tags.forEach(oTag=>{
+				let self;
+				if(tags&&tags[0]){
+					tags.forEach(tag => {
+						self = oTag !== tag ? true : false;
+					})
+				}else {
+					self=true;
+				}
+				if(self)arr.push({name:oTag,insert:false});
+			});
+			return callback(arr);
+	};
+	dealAllTags(selfTags){
+		return this._cs.getTags().then(()=>{
+			return this.dealSelfTags(selfTags,(arr:any)=>{
+				let sendTgArr,newTgArr=[];
+				if(!arr||!arr[0])return null;
+				arr.forEach((item:any)=>{
+					let index=this._cs.findI(this._cs.tgArr,item.name);
+					if(index!==null){
+						if(!item.insert&&this._cs.tgArr[index].count<=1){
+							this._cs.tgArr.splice(index,1);
+						}else{
+							this._cs.tgArr[index].count+=item.insert?1:-1;
+						}
+					}else{
+						item.name&&item.insert?this._cs.tgArr.push({name:item.name,count:1}):0;
+					}
+				});
+				return this._cs.tgArr;
+			})
+		})
 	}
 };

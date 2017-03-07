@@ -32,7 +32,7 @@ module.exports=function(mongoose,app){
 
 	//adminRouter:
 	adminRouter.use(async(ctx,next)=>{
-		if(!ctx.session.login)return;
+		if(!ctx.session.login/*||ctx.get('X-XSRF-TOKEN')!=='myKey'*/ )return;
 		await next();
 	})
 

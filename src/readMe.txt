@@ -1,0 +1,1 @@
+登录判断由journalNav getCategory时，同时获取了登录信息，保持刷新免登录
