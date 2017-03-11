@@ -1,6 +1,6 @@
 var mongoose=require('mongoose');
 var Schema=mongoose.Schema;
-mongoose.connect('mongodb://localhost:4000/test',{user:'journalBase',pass:'JeazJournal'});
+mongoose.connect('mongodb://localhost:4000/test',{user:'***',pass:'***'});
 var mySchema=new Schema({
 	title:String,
 	abstract:{type:String,default:'no abstract'},
